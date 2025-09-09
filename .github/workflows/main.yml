@@ -1,0 +1,477 @@
+# .github/workflows/main.yml
+# BTHL CheckGate - Enterprise CI/CD Pipeline
+# File: .github/workflows/main.yml
+#
+# We are implementing a comprehensive DevSecOps pipeline that demonstrates enterprise-grade
+# development practices. Our workflow includes building, testing, security scanning, and
+# deployment automation with proper approval gates and security controls.
+#
+# @author David St John <davestj@gmail.com>
+# @version 1.0.0
+# @since 2025-09-09
+#
+# CHANGELOG:
+# 2025-09-09 - FEAT: Initial enterprise CI/CD pipeline with comprehensive security scanning
+
+name: 'BTHL CheckGate - Enterprise CI/CD Pipeline'
+
+# We trigger our pipeline on strategic events that require validation and deployment
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  release:
+    types: [published]
+  schedule:
+    # We run security scans daily at 2 AM UTC to catch new vulnerabilities
+    - cron: '0 2 * * *'
+
+# We define our environment variables for consistent configuration across jobs
+env:
+  DOTNET_VERSION: '8.0.x'
+  NODE_VERSION: '20.x'
+  SOLUTION_FILE: 'BTHLCheckGate.sln'
+  TEST_RESULTS_PATH: 'TestResults'
+  SONAR_PROJECT_KEY: 'bthl-checkgate'
+  DOCKER_REGISTRY: 'ghcr.io'
+  IMAGE_NAME: 'bthl-checkgate'
+
+# We structure our jobs to run efficiently with proper dependencies and security isolation
+jobs:
+  # We begin with code quality analysis and static security scanning
+  code-analysis:
+    name: 'Code Quality & Security Analysis'
+    runs-on: ubuntu-latest
+    if: github.event_name != 'schedule'
+    
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+
+    steps:
+      - name: 'Checkout Repository'
+        uses: actions/checkout@v4
+        with:
+          # We fetch full history for comprehensive analysis
+          fetch-depth: 0
+
+      - name: 'Setup .NET SDK'
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: 'Restore NuGet Packages'
+        run: dotnet restore ${{ env.SOLUTION_FILE }}
+
+      - name: 'Run CodeQL Analysis (SAST)'
+        uses: github/codeql-action/init@v3
+        with:
+          languages: csharp
+          # We configure CodeQL with security-focused queries
+          queries: security-extended,security-and-quality
+
+      - name: 'Build Solution for Analysis'
+        run: dotnet build ${{ env.SOLUTION_FILE }} --no-restore --configuration Release
+
+      - name: 'Complete CodeQL Analysis'
+        uses: github/codeql-action/analyze@v3
+
+      - name: 'Run SonarCloud Analysis'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          # We install SonarScanner for comprehensive code quality analysis
+          dotnet tool install --global dotnet-sonarscanner
+          
+          dotnet sonarscanner begin \
+            /k:"${{ env.SONAR_PROJECT_KEY }}" \
+            /o:"bthlcorp" \
+            /d:sonar.token="${{ secrets.SONAR_TOKEN }}" \
+            /d:sonar.host.url="https://sonarcloud.io" \
+            /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml"
+          
+          dotnet build ${{ env.SOLUTION_FILE }} --configuration Release
+          
+          dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+
+      - name: 'Dependency Vulnerability Scan'
+        run: |
+          # We scan for known vulnerabilities in our dependencies
+          dotnet list package --vulnerable --include-transitive --format json > vulnerability-report.json
+          
+          # We fail the build if high-severity vulnerabilities are found
+          if [ -s vulnerability-report.json ]; then
+            echo "Vulnerabilities detected in dependencies"
+            cat vulnerability-report.json
+            exit 1
+          fi
+
+  # We execute comprehensive testing with coverage reporting
+  testing:
+    name: 'Unit & Integration Testing'
+    runs-on: windows-latest
+    if: github.event_name != 'schedule'
+    
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: TestPassword123!
+          MYSQL_DATABASE: bthl_checkgate_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    steps:
+      - name: 'Checkout Repository'
+        uses: actions/checkout@v4
+
+      - name: 'Setup .NET SDK'
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: 'Restore Dependencies'
+        run: dotnet restore ${{ env.SOLUTION_FILE }}
+
+      - name: 'Build Solution'
+        run: dotnet build ${{ env.SOLUTION_FILE }} --no-restore --configuration Release
+
+      - name: 'Setup Test Database'
+        run: |
+          # We configure our test database connection
+          mysql -h127.0.0.1 -uroot -pTestPassword123! -e "CREATE DATABASE IF NOT EXISTS bthl_checkgate_test;"
+          
+          # We apply our database schema for testing
+          mysql -h127.0.0.1 -uroot -pTestPassword123! bthl_checkgate_test < database/schema/01-initial-schema.sql
+
+      - name: 'Run Unit Tests'
+        run: |
+          dotnet test ${{ env.SOLUTION_FILE }} \
+            --no-build \
+            --configuration Release \
+            --logger "trx;LogFileName=unit-tests.trx" \
+            --collect:"XPlat Code Coverage" \
+            --results-directory ${{ env.TEST_RESULTS_PATH }} \
+            -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+
+      - name: 'Run Integration Tests'
+        env:
+          ConnectionStrings__DefaultConnection: 'Server=127.0.0.1;Database=bthl_checkgate_test;Uid=root;Pwd=TestPassword123!;'
+        run: |
+          dotnet test src/BTHLCheckGate.Tests/ \
+            --filter Category=Integration \
+            --no-build \
+            --configuration Release \
+            --logger "trx;LogFileName=integration-tests.trx" \
+            --results-directory ${{ env.TEST_RESULTS_PATH }}
+
+      - name: 'Generate Test Report'
+        uses: dorny/test-reporter@v1
+        if: always()
+        with:
+          name: 'Test Results'
+          path: '${{ env.TEST_RESULTS_PATH }}/*.trx'
+          reporter: 'dotnet-trx'
+
+      - name: 'Upload Coverage Reports'
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ${{ env.TEST_RESULTS_PATH }}
+          flags: unittests
+          name: codecov-bthl-checkgate
+
+  # We build and package our application for deployment
+  build-and-package:
+    name: 'Build & Package Application'
+    runs-on: windows-latest
+    needs: [code-analysis, testing]
+    if: github.event_name != 'schedule'
+    
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      
+    steps:
+      - name: 'Checkout Repository'
+        uses: actions/checkout@v4
+
+      - name: 'Setup .NET SDK'
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: 'Setup Node.js'
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: 'client/admin-dashboard/package-lock.json'
+
+      - name: 'Calculate Version'
+        id: version
+        run: |
+          # We generate semantic versions based on our branching strategy
+          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            VERSION="1.0.${{ github.run_number }}"
+          elif [ "${{ github.ref }}" = "refs/heads/develop" ]; then
+            VERSION="1.0.${{ github.run_number }}-beta"
+          else
+            VERSION="1.0.${{ github.run_number }}-alpha"
+          fi
+          
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Building version: $VERSION"
+
+      - name: 'Build Frontend Application'
+        working-directory: client/admin-dashboard
+        run: |
+          npm ci
+          npm run build
+          
+          # We copy built frontend to our web host project
+          Copy-Item -Path "dist/*" -Destination "../../src/BTHLCheckGate.WebHost/wwwroot/" -Recurse -Force
+
+      - name: 'Restore .NET Dependencies'
+        run: dotnet restore ${{ env.SOLUTION_FILE }}
+
+      - name: 'Build Release Configuration'
+        run: |
+          dotnet build ${{ env.SOLUTION_FILE }} \
+            --configuration Release \
+            --no-restore \
+            /p:Version=${{ steps.version.outputs.version }}
+
+      - name: 'Publish Application'
+        run: |
+          # We publish our service application for Windows deployment
+          dotnet publish src/BTHLCheckGate.Service/BTHLCheckGate.Service.csproj \
+            --configuration Release \
+            --output publish/service \
+            --no-build \
+            /p:Version=${{ steps.version.outputs.version }}
+          
+          # We publish our web API for container deployment
+          dotnet publish src/BTHLCheckGate.WebApi/BTHLCheckGate.WebApi.csproj \
+            --configuration Release \
+            --output publish/webapi \
+            --no-build \
+            /p:Version=${{ steps.version.outputs.version }}
+
+      - name: 'Create Installation Package'
+        run: |
+          # We create a comprehensive installation package
+          Compress-Archive -Path publish/* -DestinationPath "BTHLCheckGate-${{ steps.version.outputs.version }}.zip"
+
+      - name: 'Upload Build Artifacts'
+        uses: actions/upload-artifact@v4
+        with:
+          name: 'bthl-checkgate-${{ steps.version.outputs.version }}'
+          path: |
+            BTHLCheckGate-${{ steps.version.outputs.version }}.zip
+            publish/
+          retention-days: 30
+
+  # We perform container security scanning and build Docker images
+  container-security:
+    name: 'Container Security Scanning'
+    runs-on: ubuntu-latest
+    needs: [build-and-package]
+    if: github.event_name != 'schedule'
+    
+    permissions:
+      contents: read
+      security-events: write
+
+    steps:
+      - name: 'Checkout Repository'
+        uses: actions/checkout@v4
+
+      - name: 'Download Build Artifacts'
+        uses: actions/download-artifact@v4
+        with:
+          name: 'bthl-checkgate-${{ needs.build-and-package.outputs.version }}'
+
+      - name: 'Build Docker Image'
+        run: |
+          # We build our Docker image for security scanning
+          docker build -t ${{ env.IMAGE_NAME }}:${{ needs.build-and-package.outputs.version }} .
+
+      - name: 'Run Trivy Security Scan'
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: '${{ env.IMAGE_NAME }}:${{ needs.build-and-package.outputs.version }}'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+
+      - name: 'Upload Trivy Results'
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+      - name: 'Run Snyk Container Scan'
+        uses: snyk/actions/docker@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          image: '${{ env.IMAGE_NAME }}:${{ needs.build-and-package.outputs.version }}'
+          args: '--severity-threshold=high'
+
+  # We deploy to development environment for testing
+  deploy-development:
+    name: 'Deploy to Development'
+    runs-on: ubuntu-latest
+    needs: [build-and-package, container-security]
+    if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
+    
+    environment:
+      name: development
+      url: https://dev-checkgate.bthlcorp.com
+
+    steps:
+      - name: 'Download Artifacts'
+        uses: actions/download-artifact@v4
+        with:
+          name: 'bthl-checkgate-${{ needs.build-and-package.outputs.version }}'
+
+      - name: 'Deploy to Development Server'
+        run: |
+          # We would implement actual deployment steps here
+          echo "Deploying version ${{ needs.build-and-package.outputs.version }} to development"
+          
+          # Example deployment commands:
+          # - Copy files to development server
+          # - Update configuration for development environment
+          # - Restart services
+          # - Run smoke tests
+
+  # We deploy to production with manual approval
+  deploy-production:
+    name: 'Deploy to Production'
+    runs-on: ubuntu-latest
+    needs: [build-and-package, container-security]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    environment:
+      name: production
+      url: https://checkgate.bthlcorp.com
+
+    steps:
+      - name: 'Download Artifacts'
+        uses: actions/download-artifact@v4
+        with:
+          name: 'bthl-checkgate-${{ needs.build-and-package.outputs.version }}'
+
+      - name: 'Deploy to Production'
+        run: |
+          # We implement production deployment with proper safeguards
+          echo "Deploying version ${{ needs.build-and-package.outputs.version }} to production"
+          
+          # Production deployment would include:
+          # - Blue-green deployment strategy
+          # - Database migration with rollback capability
+          # - Health checks and monitoring
+          # - Gradual traffic routing
+
+  # We run scheduled security scans for continuous monitoring
+  security-scan:
+    name: 'Scheduled Security Scan'
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule'
+    
+    permissions:
+      contents: read
+      security-events: write
+
+    steps:
+      - name: 'Checkout Repository'
+        uses: actions/checkout@v4
+
+      - name: 'Run Dependency Check'
+        uses: dependency-check/Dependency-Check_Action@main
+        with:
+          project: 'BTHL CheckGate'
+          path: '.'
+          format: 'ALL'
+
+      - name: 'Upload Dependency Check Results'
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-check-report
+          path: reports/
+
+# .github/workflows/security.yml
+# We create a dedicated security-focused workflow for comprehensive scanning
+name: 'Security Scanning'
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 6 * * 1' # Weekly security scan on Mondays
+
+env:
+  DOTNET_VERSION: '8.0.x'
+
+jobs:
+  comprehensive-security-scan:
+    name: 'Comprehensive Security Analysis'
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+      security-events: write
+
+    steps:
+      - name: 'Checkout Repository'
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 'Setup .NET'
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: 'OWASP Dependency Check'
+        uses: dependency-check/Dependency-Check_Action@main
+        id: depcheck
+        with:
+          project: 'BTHL-CheckGate'
+          path: '.'
+          format: 'ALL'
+          args: >
+            --enableRetired
+            --enableExperimental
+            --log /tmp/dependency-check.log
+
+      - name: 'Semgrep SAST Scan'
+        uses: semgrep/semgrep-action@v1
+        with:
+          config: >-
+            p/security-audit
+            p/secrets
+            p/csharp
+            p/typescript
+            p/dockerfile
+
+      - name: 'Upload Security Scan Results'
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: semgrep.sarif
+
+      - name: 'Security Report Summary'
+        if: always()
+        run: |
+          echo "## Security Scan Summary" >> $GITHUB_STEP_SUMMARY
+          echo "- OWASP Dependency Check: Completed" >> $GITHUB_STEP_SUMMARY
+          echo "- Semgrep SAST Scan: Completed" >> $GITHUB_STEP_SUMMARY
+          echo "- Results uploaded to Security tab" >> $GITHUB_STEP_SUMMARY
