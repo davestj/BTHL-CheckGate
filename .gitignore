@@ -1,0 +1,28 @@
+# Node modules
+node_modules/
+
+# Build outputs
+build/
+dist/
+*.log
+
+# .NET build artifacts
+bin/
+obj/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Additional .NET artifacts
+*.suo
+*.user
+*.csproj.user
+*.sln.docstates
+
+# Coverage and logs
+coverage/
+logs/
+
+# Environment files
+.env
