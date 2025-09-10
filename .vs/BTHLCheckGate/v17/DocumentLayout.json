@@ -1,0 +1,122 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Administrator\\dev\\BTHL-CheckGate\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Administrator\\dev\\BTHL-CheckGate\\SAST.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SAST.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{264570E4-6AF7-4164-B712-56514C6BB115}|src\\BTHLCheckGate.Models\\BTHLCheckGate.Models.csproj|c:\\users\\administrator\\dev\\bthl-checkgate\\src\\bthlcheckgate.models\\bthlcheckgate.models.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{264570E4-6AF7-4164-B712-56514C6BB115}|src\\BTHLCheckGate.Models\\BTHLCheckGate.Models.csproj|solutionrelative:src\\bthlcheckgate.models\\bthlcheckgate.models.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{85B48641-9A47-4A38-B2FA-95F01DD607E1}|src\\BTHLCheckGate.Data\\BTHLCheckGate.Data.csproj|c:\\users\\administrator\\dev\\bthl-checkgate\\src\\bthlcheckgate.data\\bthlcheckgate.data.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{85B48641-9A47-4A38-B2FA-95F01DD607E1}|src\\BTHLCheckGate.Data\\BTHLCheckGate.Data.csproj|solutionrelative:src\\bthlcheckgate.data\\bthlcheckgate.data.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E8FB1F3D-1726-45C6-B4D1-D3A4D5F3DC1A}|src\\BTHLCheckGate.Tests\\BTHLCheckGate.Tests.csproj|c:\\users\\administrator\\dev\\bthl-checkgate\\src\\bthlcheckgate.tests\\bthlcheckgate.tests.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{E8FB1F3D-1726-45C6-B4D1-D3A4D5F3DC1A}|src\\BTHLCheckGate.Tests\\BTHLCheckGate.Tests.csproj|solutionrelative:src\\bthlcheckgate.tests\\bthlcheckgate.tests.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A1B2C3D4-E5F6-7890-1234-567890ABCDEF}|src\\BTHLCheckGate.Core\\BTHLCheckGate.Core.csproj|c:\\users\\administrator\\dev\\bthl-checkgate\\src\\bthlcheckgate.core\\bthlcheckgate.core.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{A1B2C3D4-E5F6-7890-1234-567890ABCDEF}|src\\BTHLCheckGate.Core\\BTHLCheckGate.Core.csproj|solutionrelative:src\\bthlcheckgate.core\\bthlcheckgate.core.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3D9BB333-2882-442E-A3B8-D787CF62BD50}|src\\BTHLCheckGate.Security\\BTHLCheckGate.Security.csproj|c:\\users\\administrator\\dev\\bthl-checkgate\\src\\bthlcheckgate.security\\bthlcheckgate.security.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{3D9BB333-2882-442E-A3B8-D787CF62BD50}|src\\BTHLCheckGate.Security\\BTHLCheckGate.Security.csproj|solutionrelative:src\\bthlcheckgate.security\\bthlcheckgate.security.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "SAST.md",
+              "DocumentMoniker": "C:\\Users\\Administrator\\dev\\BTHL-CheckGate\\SAST.md",
+              "RelativeDocumentMoniker": "SAST.md",
+              "ToolTip": "C:\\Users\\Administrator\\dev\\BTHL-CheckGate\\SAST.md",
+              "RelativeToolTip": "SAST.md",
+              "ViewState": "AgIAALgAAAAA0szMzAwswAYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001818|",
+              "WhenOpened": "2025-09-10T04:53:41.182Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "BTHLCheckGate.Tests",
+              "DocumentMoniker": "C:\\Users\\Administrator\\dev\\BTHL-CheckGate\\src\\BTHLCheckGate.Tests\\BTHLCheckGate.Tests.csproj",
+              "RelativeDocumentMoniker": "src\\BTHLCheckGate.Tests\\BTHLCheckGate.Tests.csproj",
+              "ToolTip": "C:\\Users\\Administrator\\dev\\BTHL-CheckGate\\src\\BTHLCheckGate.Tests\\BTHLCheckGate.Tests.csproj",
+              "RelativeToolTip": "src\\BTHLCheckGate.Tests\\BTHLCheckGate.Tests.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB8AAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-09-10T02:37:36.958Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "BTHLCheckGate.Security",
+              "DocumentMoniker": "C:\\Users\\Administrator\\dev\\BTHL-CheckGate\\src\\BTHLCheckGate.Security\\BTHLCheckGate.Security.csproj",
+              "RelativeDocumentMoniker": "src\\BTHLCheckGate.Security\\BTHLCheckGate.Security.csproj",
+              "ToolTip": "C:\\Users\\Administrator\\dev\\BTHL-CheckGate\\src\\BTHLCheckGate.Security\\BTHLCheckGate.Security.csproj",
+              "RelativeToolTip": "src\\BTHLCheckGate.Security\\BTHLCheckGate.Security.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-09-10T02:37:17.474Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "BTHLCheckGate.Models",
+              "DocumentMoniker": "C:\\Users\\Administrator\\dev\\BTHL-CheckGate\\src\\BTHLCheckGate.Models\\BTHLCheckGate.Models.csproj",
+              "RelativeDocumentMoniker": "src\\BTHLCheckGate.Models\\BTHLCheckGate.Models.csproj",
+              "ToolTip": "C:\\Users\\Administrator\\dev\\BTHL-CheckGate\\src\\BTHLCheckGate.Models\\BTHLCheckGate.Models.csproj",
+              "RelativeToolTip": "src\\BTHLCheckGate.Models\\BTHLCheckGate.Models.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-09-10T02:37:11.454Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "BTHLCheckGate.Data",
+              "DocumentMoniker": "C:\\Users\\Administrator\\dev\\BTHL-CheckGate\\src\\BTHLCheckGate.Data\\BTHLCheckGate.Data.csproj",
+              "RelativeDocumentMoniker": "src\\BTHLCheckGate.Data\\BTHLCheckGate.Data.csproj",
+              "ToolTip": "C:\\Users\\Administrator\\dev\\BTHL-CheckGate\\src\\BTHLCheckGate.Data\\BTHLCheckGate.Data.csproj",
+              "RelativeToolTip": "src\\BTHLCheckGate.Data\\BTHLCheckGate.Data.csproj",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAkwBYAAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-09-10T02:37:08.649Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "BTHLCheckGate.Core",
+              "DocumentMoniker": "C:\\Users\\Administrator\\dev\\BTHL-CheckGate\\src\\BTHLCheckGate.Core\\BTHLCheckGate.Core.csproj",
+              "RelativeDocumentMoniker": "src\\BTHLCheckGate.Core\\BTHLCheckGate.Core.csproj",
+              "ToolTip": "C:\\Users\\Administrator\\dev\\BTHL-CheckGate\\src\\BTHLCheckGate.Core\\BTHLCheckGate.Core.csproj",
+              "RelativeToolTip": "src\\BTHLCheckGate.Core\\BTHLCheckGate.Core.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-09-10T02:37:04.446Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

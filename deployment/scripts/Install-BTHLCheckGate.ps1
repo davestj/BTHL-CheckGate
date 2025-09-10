@@ -203,13 +203,7 @@ COLLATE utf8mb4_unicode_ci;
     
     try {
         # We execute the database creation script
-        $mysqlArgs = @(
-            "-h", $MySqlHost
-            "-u", "root"
-            "-e", $createDbScript
-        )
-        
-        Start-Process -FilePath "mysql" -ArgumentList $mysqlArgs -Wait -NoNewWindow
+        & "C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe" -h $MySqlHost -u root -e $createDbScript 2>$null
         Write-InstallLog "Database created successfully" -Level "Success"
         
         # We apply the database schema
@@ -217,13 +211,12 @@ COLLATE utf8mb4_unicode_ci;
         if (Test-Path $schemaPath) {
             Write-InstallLog "Applying database schema..." -Level "Info"
             
-            $schemaArgs = @(
-                "-h", $MySqlHost
-                "-u", "root"
-                $MySqlDatabase
-            )
+            $schemaContent = Get-Content $schemaPath -Raw
+            $tempFile = [System.IO.Path]::GetTempFileName() + ".sql"
+            $schemaContent | Out-File -FilePath $tempFile -Encoding UTF8
             
-            Get-Content $schemaPath | mysql @schemaArgs
+            & "C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe" -h $MySqlHost -u root $MySqlDatabase < $tempFile 2>$null
+            Remove-Item $tempFile -ErrorAction SilentlyContinue
             Write-InstallLog "Database schema applied successfully" -Level "Success"
         }
     }

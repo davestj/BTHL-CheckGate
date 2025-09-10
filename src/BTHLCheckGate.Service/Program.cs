@@ -16,10 +16,15 @@
  */
 
 using BTHLCheckGate.Core.Services;
-using BTHLCheckGate.WebApi;
+using BTHLCheckGate.Core.Interfaces;
+using BTHLCheckGate.Data;
+using BTHLCheckGate.Data.Repositories;
+using BTHLCheckGate.Security.Services;
+using BTHLCheckGate.Service.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 using System.CommandLine;
 
 namespace BTHLCheckGate.Service
@@ -109,10 +114,25 @@ namespace BTHLCheckGate.Service
             return Host.CreateDefaultBuilder(args)
                 .ConfigureServices((context, services) =>
                 {
+                    // We configure our database connection
+                    var connectionString = context.Configuration.GetConnectionString("DefaultConnection") 
+                        ?? "Server=localhost;Database=bthl_checkgate;Uid=root;Pwd=5243wrvNN;";
+                    
+                    services.AddDbContext<CheckGateDbContext>(options =>
+                    {
+                        options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+                    });
+
+                    // We register our repository services
+                    services.AddScoped<ISystemMetricsRepository, SystemMetricsRepository>();
+                    services.AddScoped<IKubernetesMetricsRepository, KubernetesMetricsRepository>();
+                    services.AddScoped<IApiTokenRepository, ApiTokenRepository>();
+
                     // We register our core monitoring services
-                    services.AddSingleton<ISystemMonitoringService, SystemMonitoringService>();
-                    services.AddSingleton<IKubernetesMonitoringService, KubernetesMonitoringService>();
-                    services.AddSingleton<IMetricsCollectionService, MetricsCollectionService>();
+                    services.AddScoped<ISystemMonitoringService, SystemMonitoringService>();
+                    services.AddScoped<IKubernetesMonitoringService, KubernetesMonitoringService>();
+                    services.AddScoped<IMetricsCollectionService, MetricsCollectionService>();
+                    services.AddScoped<IJwtTokenService, JwtTokenService>();
                     
                     // We add our main service worker
                     services.AddHostedService<CheckGateWorkerService>();
