@@ -24,7 +24,7 @@ This Static Application Security Testing (SAST) report analyzes the BTHL CheckGa
 ### 🔴 CRITICAL: Hard-coded Database Credentials
 **Location**: `src/BTHLCheckGate.Service/appsettings.json:3`, `src/BTHLCheckGate.WebApi/Startup.cs:34`, `src/BTHLCheckGate.Data/CheckGateDbContext.cs:312`
 ```json
-"DefaultConnection": "Server=localhost;Database=bthl_checkgate;Uid=root;Pwd=5243wrvNN;"
+"DefaultConnection": "Server=localhost;Database=bthl_checkgate;Uid=root;Pwd=CHANGEME123;"
 ```
 **Risk**: Credentials are exposed in source code and configuration files
 **Remediation**: 
@@ -35,7 +35,7 @@ This Static Application Security Testing (SAST) report analyzes the BTHL CheckGa
 ### 🔴 CRITICAL: Weak JWT Secret Key
 **Location**: `src/BTHLCheckGate.WebApi/Startup.cs:57`, `src/BTHLCheckGate.Service/appsettings.json:8`
 ```csharp
-var secretKey = Configuration["Jwt:SecretKey"] ?? "BTHLCheckGate-SecretKey-ChangeThis-InProduction-MustBe256BitsOrLonger!";
+var secretKey = Configuration["Jwt:SecretKey"] ?? "CHANGEME123-JWT-SECRET-KEY-MUST-BE-CHANGED-IN-PRODUCTION!";
 ```
 **Risk**: Predictable JWT secret allows token forgery
 **Remediation**:

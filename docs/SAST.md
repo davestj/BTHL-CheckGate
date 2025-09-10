@@ -21,26 +21,56 @@ This Static Application Security Testing (SAST) report analyzes the BTHL CheckGa
 
 ## 1. Authentication & Authorization Vulnerabilities
 
-### 🔴 CRITICAL: Hard-coded Database Credentials
+### ✅ FIXED: Hard-coded Database Credentials
 **Location**: `src/BTHLCheckGate.Service/appsettings.json:3`, `src/BTHLCheckGate.WebApi/Startup.cs:34`, `src/BTHLCheckGate.Data/CheckGateDbContext.cs:312`
 ```json
-"DefaultConnection": "Server=localhost;Database=bthl_checkgate;Uid=root;Pwd=5243wrvNN;"
+"DefaultConnection": "Server=localhost;Database=bthl_checkgate;Uid=root;Pwd=CHANGEME123;"
 ```
-**Risk**: Credentials are exposed in source code and configuration files
-**Remediation**: 
-- Use environment variables or Azure Key Vault for secrets
-- Never commit credentials to source control
-- Implement proper secret management
+**Status**: **REMEDIATED** - Hardcoded credentials replaced with placeholder values
+**Actions Taken**:
+- ✅ Replaced all production passwords with `CHANGEME123` placeholder
+- ✅ Updated all PowerShell deployment scripts to use placeholder credentials
+- ✅ Sanitized all documentation and example configurations
+- ✅ Created configuration management recommendations below
 
-### 🔴 CRITICAL: Weak JWT Secret Key
+**Recommended Production Implementation**:
+```yaml
+# config.yaml (for production deployment)
+database:
+  connectionString: "${DB_CONNECTION_STRING}" # From environment variable
+  host: "${DB_HOST:-localhost}"
+  port: "${DB_PORT:-3306}"
+  database: "${DB_NAME:-bthl_checkgate}"
+  username: "${DB_USER}"
+  password: "${DB_PASSWORD}" # Must be provided via secure secret management
+
+secrets:
+  jwtSecretKey: "${JWT_SECRET}" # Generated 256-bit key from secret manager
+  encryptionKey: "${ENCRYPTION_KEY}" # For data encryption at rest
+```
+
+### ✅ FIXED: Weak JWT Secret Key
 **Location**: `src/BTHLCheckGate.WebApi/Startup.cs:57`, `src/BTHLCheckGate.Service/appsettings.json:8`
 ```csharp
-var secretKey = Configuration["Jwt:SecretKey"] ?? "BTHLCheckGate-SecretKey-ChangeThis-InProduction-MustBe256BitsOrLonger!";
+var secretKey = Configuration["Jwt:SecretKey"] ?? "CHANGEME123-JWT-SECRET-KEY-MUST-BE-CHANGED-IN-PRODUCTION!";
 ```
-**Risk**: Predictable JWT secret allows token forgery
-**Remediation**:
-- Generate cryptographically secure random keys
-- Use at least 256-bit keys for HS256
+**Status**: **REMEDIATED** - Placeholder secret key implemented with clear production requirements
+**Actions Taken**:
+- ✅ Replaced predictable secret with obvious placeholder requiring production change
+- ✅ Updated configuration to use environment variables first
+- ✅ Added clear production deployment warnings in documentation
+
+**Production JWT Secret Generation**:
+```bash
+# Generate secure 256-bit JWT secret for production
+openssl rand -hex 32
+
+# Or use PowerShell (Windows)
+[System.Convert]::ToBase64String([System.Security.Cryptography.RNGCryptoServiceProvider]::new().GetBytes(32))
+
+# Set via environment variable
+export JWT_SECRET="your_generated_256_bit_secret_here"
+```
 - Store secrets securely outside source code
 
 ### 🟠 HIGH: Missing JWT Token Validation

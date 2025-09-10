@@ -14,7 +14,7 @@ if (-not $isAdmin) {
 # Configuration
 $mysqlHost = "localhost"
 $mysqlUser = "root" 
-$mysqlPassword = "5243wrvNN"
+$mysqlPassword = "CHANGEME123"
 $mysqlPath = "C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe"
 $schemaFile = "database\schema\01-initial-schema.sql"
 

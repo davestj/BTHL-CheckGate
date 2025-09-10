@@ -4,7 +4,7 @@
 
 Your system has:
 - ✅ **MySQL 8.0** installed at `C:\Program Files\MySQL\MySQL Server 8.0\bin`
-- ✅ **MySQL Credentials**: localhost, root, password: 5243wrvNN
+- ✅ **MySQL Credentials**: localhost, root, password: CHANGEME123
 - 🔄 **.NET 9** (will be verified during setup)
 - 🔄 **Docker Desktop** (optional, for Kubernetes monitoring)
 
@@ -80,7 +80,7 @@ dotnet run --project src/BTHLCheckGate.Service -- --console --port 9300
 
 **Database Connection Issues:**
 - Ensure MySQL service is running
-- Verify credentials: root / 5243wrvNN
+- Verify credentials: root / CHANGEME123
 - Check Windows Firewall settings
 
 **Build Issues:**

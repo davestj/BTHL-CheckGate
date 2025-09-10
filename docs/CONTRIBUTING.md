@@ -71,7 +71,7 @@ cd client/admin-dashboard && npm install && cd ../..
 CREATE DATABASE bthl_checkgate_dev CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- Create test user (optional)
-CREATE USER 'dev_user'@'localhost' IDENTIFIED BY 'DevPassword123!';
+CREATE USER 'dev_user'@'localhost' IDENTIFIED BY 'CHANGEME123!';
 GRANT ALL PRIVILEGES ON bthl_checkgate_dev.* TO 'dev_user'@'localhost';
 FLUSH PRIVILEGES;
 ```

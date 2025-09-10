@@ -31,7 +31,7 @@ namespace BTHLCheckGate.WebApi
         {
             // Database configuration
             var connectionString = Configuration.GetConnectionString("DefaultConnection") 
-                ?? "Server=localhost;Database=bthl_checkgate;Uid=root;Pwd=5243wrvNN;";
+                ?? "Server=localhost;Database=bthl_checkgate;Uid=root;Pwd=CHANGEME123;";
             
             services.AddDbContext<CheckGateDbContext>(options =>
             {
@@ -54,7 +54,7 @@ namespace BTHLCheckGate.WebApi
             services.AddScoped<IJwtTokenService, JwtTokenService>();
 
             // JWT Authentication
-            var secretKey = Configuration["Jwt:SecretKey"] ?? "BTHLCheckGate-SecretKey-ChangeThis-InProduction-MustBe256BitsOrLonger!";
+            var secretKey = Configuration["Jwt:SecretKey"] ?? "CHANGEME123-JWT-SECRET-KEY-MUST-BE-CHANGED-IN-PRODUCTION!";
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {

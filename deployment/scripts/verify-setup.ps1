@@ -25,7 +25,7 @@ try {
 Write-Host "Checking MySQL..." -ForegroundColor Yellow
 try {
     $testQuery = "SELECT VERSION();"
-    & "C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe" -h localhost -u root -p5243wrvNN -e $testQuery 2>$null
+    & "C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe" -h localhost -u root -pCHANGEME123 -e $testQuery 2>$null
     if ($LASTEXITCODE -eq 0) {
         Write-Host "✓ MySQL connection successful" -ForegroundColor Green
     } else {
@@ -41,7 +41,7 @@ try {
 Write-Host "Checking BTHL CheckGate database..." -ForegroundColor Yellow
 try {
     $dbQuery = "USE bthl_checkgate; SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = 'bthl_checkgate';"
-    $tableCount = & "C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe" -h localhost -u root -p5243wrvNN -e $dbQuery --silent 2>$null
+    $tableCount = & "C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe" -h localhost -u root -pCHANGEME123 -e $dbQuery --silent 2>$null
     if ($LASTEXITCODE -eq 0 -and $tableCount -gt 0) {
         Write-Host "✓ Database exists with $tableCount tables" -ForegroundColor Green
     } else {

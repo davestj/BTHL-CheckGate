@@ -309,8 +309,8 @@ namespace BTHLCheckGate.Data
             {
                 // We provide default configuration for development environments
                 optionsBuilder.UseMySql(
-                    "Server=localhost;Database=bthl_checkgate_dev;Uid=dev_user;Pwd=DevPassword123!;",
-                    ServerVersion.AutoDetect("Server=localhost;Database=bthl_checkgate_dev;Uid=dev_user;Pwd=DevPassword123!;"),
+                    "Server=localhost;Database=bthl_checkgate_dev;Uid=dev_user;Pwd=CHANGEME123!;",
+                    ServerVersion.AutoDetect("Server=localhost;Database=bthl_checkgate_dev;Uid=dev_user;Pwd=CHANGEME123!;"),
                     options => options.EnableRetryOnFailure(3, TimeSpan.FromSeconds(5), null)
                 );
             }

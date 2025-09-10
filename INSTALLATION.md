@@ -137,10 +137,10 @@ choco install dotnet-8.0-runtime dotnet-8.0-sdk nodejs mysql git vscode -y
 
 ```bash
 # We start MySQL using Docker (alternative to local installation)
-docker run --name mysql-checkgate -e MYSQL_ROOT_PASSWORD=DevPassword123! -e MYSQL_DATABASE=bthl_checkgate_dev -p 3306:3306 -d mysql:8.0
+docker run --name mysql-checkgate -e MYSQL_ROOT_PASSWORD=CHANGEME123! -e MYSQL_DATABASE=bthl_checkgate_dev -p 3306:3306 -d mysql:8.0
 
 # We wait for MySQL to be ready
-docker exec mysql-checkgate mysqladmin --user=root --password=DevPassword123! --host="127.0.0.1" ping --silent
+docker exec mysql-checkgate mysqladmin --user=root --password=CHANGEME123! --host="127.0.0.1" ping --silent
 ```
 
 #### Building and Running for Development

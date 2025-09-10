@@ -234,7 +234,7 @@ winget install Microsoft.VisualStudio.2022.Community
 ```sql
 -- Create development database
 CREATE DATABASE bthl_checkgate_dev CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-CREATE USER 'dev_user'@'localhost' IDENTIFIED BY 'DevPassword123!';
+CREATE USER 'dev_user'@'localhost' IDENTIFIED BY 'CHANGEME123!';
 GRANT ALL PRIVILEGES ON bthl_checkgate_dev.* TO 'dev_user'@'localhost';
 ```
 

@@ -116,7 +116,7 @@ namespace BTHLCheckGate.Service
                 {
                     // We configure our database connection
                     var connectionString = context.Configuration.GetConnectionString("DefaultConnection") 
-                        ?? "Server=localhost;Database=bthl_checkgate;Uid=root;Pwd=5243wrvNN;";
+                        ?? "Server=localhost;Database=bthl_checkgate;Uid=root;Pwd=CHANGEME123;";
                     
                     services.AddDbContext<CheckGateDbContext>(options =>
                     {
