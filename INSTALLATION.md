@@ -147,7 +147,7 @@ docker exec mysql-checkgate mysqladmin --user=root --password=DevPassword123! --
 
 ```bash
 # We clone the repository and navigate to the project directory
-git clone https://github.com/bthlcorp/bthl-checkgate.git
+git clone https://github.com/davestj/BTHL-CheckGate.git
 cd bthl-checkgate
 
 # We restore .NET dependencies

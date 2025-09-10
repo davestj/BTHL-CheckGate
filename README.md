@@ -1,8 +1,8 @@
 # BTHL CheckGate - Enterprise System Monitoring Platform
 
-[![Build Status](https://github.com/bthlcorp/bthl-checkgate/workflows/CI/badge.svg)](https://github.com/bthlcorp/bthl-checkgate/actions)
-[![Security Scan](https://github.com/bthlcorp/bthl-checkgate/workflows/Security/badge.svg)](https://github.com/bthlcorp/bthl-checkgate/security)
-[![codecov](https://codecov.io/gh/bthlcorp/bthl-checkgate/branch/main/graph/badge.svg)](https://codecov.io/gh/bthlcorp/bthl-checkgate)
+[![Build Status](https://github.com/davestj/BTHL-CheckGate/workflows/CI/badge.svg)](https://github.com/davestj/BTHL-CheckGate/actions)
+[![Security Scan](https://github.com/davestj/BTHL-CheckGate/workflows/Security/badge.svg)](https://github.com/davestj/BTHL-CheckGate/security)
+[![codecov](https://codecov.io/gh/davestj/BTHL-CheckGate/branch/main/graph/badge.svg)](https://codecov.io/gh/davestj/BTHL-CheckGate)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 > **We built** BTHL CheckGate as a comprehensive enterprise-grade Windows system monitoring platform that demonstrates advanced DevSecOps capabilities while providing real-time insights into system performance and Kubernetes cluster health.
@@ -13,8 +13,8 @@
 
 ```powershell
 # Clone the repository
-git clone https://github.com/bthlcorp/bthl-checkgate.git
-cd bthl-checkgate
+git clone https://github.com/davestj/BTHL-CheckGate.git
+cd BTHL-CheckGate
 
 # Run the automated installation (requires Administrator privileges)
 .\deployment\scripts\Install-BTHLCheckGate.ps1
@@ -296,8 +296,8 @@ dotnet run --project src/BTHLCheckGate.Service -- --console --port 9300
 **We provide** multiple support channels:
 
 - **📚 Documentation**: Comprehensive guides in `/docs`
-- **🐛 Issues**: [GitHub Issues](https://github.com/bthlcorp/bthl-checkgate/issues)
-- **💬 Discussions**: [GitHub Discussions](https://github.com/bthlcorp/bthl-checkgate/discussions)
+- **🐛 Issues**: [GitHub Issues](https://github.com/davestj/BTHL-CheckGate/issues)
+- **💬 Discussions**: [GitHub Wiki](https://github.com/davestj/BTHL-CheckGate/wiki)
 - **📧 Enterprise**: Contact enterprise@bthlcorp.com
 
 ## 🔮 Roadmap
